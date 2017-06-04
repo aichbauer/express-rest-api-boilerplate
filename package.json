@@ -1,0 +1,62 @@
+{
+  "name": "express-rest-api-boilerplate",
+  "version": "0.0.0",
+  "author": "Lukas Aichbauer <l.aichbauer@gmail.com>",
+  "licence": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aichbauer/express-rest-api-boilerplate.git"
+  },
+  "homepage": "https://github.com/aichbauer/express-rest-api-boilerplate#readme",
+  "bugs": {
+    "url": "https://github.com/aichbauer/express-rest-api-boilerplate/issues"
+  },
+  "scripts": {
+    "dev": "export NODE_ENV=development && node ./api/api.js",
+    "dropDB": "rm ./db/database.sqlite && touch ./db/database.sqlite",
+    "lint": "eslint ./api/. ./config/. ./test/.",
+    "start": "npm run nodemon",
+    "nodemon": "nodemon --exec npm run dev",
+    "prepush": "npm test; npm run dropDB",
+    "pretest": "npm run lint",
+    "production": "export NODE_ENV=production && node ./api/api.js",
+    "test": "export NODE_ENV=test && nyc ava -s",
+    "test-ci": "nyc ava --no-color"
+  },
+  "babel": {
+    "presets": ["env"]
+  },
+  "ava": {
+    "require": [
+      "babel-register",
+      "babel-polyfill"
+    ],
+    "babel": "inherit"
+  },
+  "nyc": {
+    "exclude": [
+      "test"
+    ]
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "express-routes-mapper": "^1.0.1",
+    "helmet": "^3.6.1",
+    "jsonwebtoken": "^7.4.1",
+    "nodemon": "^1.11.0",
+    "nyc": "^11.0.1",
+    "sequelize": "^3.30.4",
+    "sqlite3": "^3.1.8",
+    "supertest": "^3.0.0"
+  },
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.3.0",
+    "husky": "^0.13.4"
+  }
+}
