@@ -19,7 +19,6 @@ const auth = require('./policies/auth.policy');
  */
 const app = express();
 const server = http.Server(app);
-const port = process.env.PORT_ENV || config.port;
 const mappedOpenRoutes = mapRoutes(config.publicRoutes, 'api/controllers/');
 const mappedAuthRoutes = mapRoutes(config.privateRoutes, 'api/controllers/');
 
@@ -76,7 +75,7 @@ const DB = database
     return database
       .sync()
       .then(() => {
-        console.log(`There we go ♕\nStarted in ${environment}\nGladly listening on http://127.0.0.1:${port}`);
+        console.log(`There we go ♕\nStarted in ${environment}\nGladly listening on http://127.0.0.1:${config.port}`);
         console.log('Connection to the database has been established successfully');
       });
   })

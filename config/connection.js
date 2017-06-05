@@ -15,10 +15,10 @@ const testing = {
 };
 
 const production = {
-  database: process.env.DB_ENV,
-  username: process.env.DB_USER_ENV,
-  password: process.env.DB_PW_ENV,
-  host: 'localhost',
+  database: process.env.DB_NAME,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  host: process.env.DB_HOST || 'localhost',
   dialect: 'sqlite' || 'mysql' || 'postgres',
 };
 
