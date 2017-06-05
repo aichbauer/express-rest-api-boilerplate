@@ -428,7 +428,7 @@ Now simple configure the keys with your credentials.
 
 To not configure the production code.
 
-To start let the DB now the credentials for production, add `environment variables` by typing e.g. `export DB_USER_ENV=yourusername` before starting the api.
+To start the DB, add the credentials for production. add `environment variables` by typing e.g. `export DB_USER=yourusername` before starting the api.
 
 ## Routes
 
@@ -566,14 +566,15 @@ This command:
 
 Before running on production you have to set the **environment vaiables**:
 
-- DB_ENV - database name
-- DB_USER_ENV - user for the production database
-- DB_PW_ENV - password for production database user
-- SECRET_ENV - secret for json web token
+- DB_NAME - database name for production
+- DB_USER - database username for production
+- DB_PASS - database password for production
+- DB_HOST - database host for production
+- JWT_SECERT - secret for json web token
 
 Optional:
 
-- PORT_ENV - the port your api on 127.0.0.1, default to 3333
+- PORT - the port your api on 127.0.0.1, default to 3333
 
 ### other commands
 
