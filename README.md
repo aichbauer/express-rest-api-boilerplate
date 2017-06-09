@@ -557,8 +557,10 @@ This command:
 
 - runs `npm run lint` ([eslint](http://eslint.org/)) with the [airbnb styleguide](https://github.com/airbnb/javascript) without arrow-parens rule for **better readability**
 - sets the **environment variable** `NODE_ENV` to `testing`
+- creates the `database.sqlite` for the test
 - runs `nyc` the cli-tool for [istanbul](https://istanbul.js.org/) for test coverage
 - runs `ava -s` for testing with [AVA](https://github.com/avajs/ava)
+- drops the `database.sqlite` after the test
 
 ## npm run production
 
@@ -583,7 +585,8 @@ Optional:
 ### other commands
 
 - `npm run dev` - simply start the server withou a watcher
-- `npm run drop-db` - drops **ONLY** the sqlite database
+- `npm run create-sqlite-db` - creates the sqlite database
+- `npm run drop-sqlite-db` - drops **ONLY** the sqlite database
 - `npm run lint` - linting with [eslint](http://eslint.org/)
 - `npm run nodemon` - same as `npm start``
 - `npm run prepush` - a hook wich runs before pushing to a repository, runs `npm test` and `npm run dropDB`
