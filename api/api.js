@@ -63,7 +63,7 @@ const DB = database
           database
             .sync()
             .then(() => {
-              console.log(`There we go ♕\nStarted in ${environment}\nGladly listening on http://127.0.0.1:${port}`);
+              console.log(`There we go ♕\nStarted in ${environment}\nGladly listening on http://127.0.0.1:${config.port}`);
               console.log('Connection to the database has been established successfully');
             })
             .catch((err) => console.error('Unable to connect to the database:', err))
@@ -83,7 +83,7 @@ const DB = database
     console.error('Unable to connect to the database:', err);
   });
 
-server.listen(port, () => {
+server.listen(config.port, () => {
   if (environment !== 'production' &&
     environment !== 'development' &&
     environment !== 'testing'
