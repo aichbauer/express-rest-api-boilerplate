@@ -48,6 +48,8 @@ $ yarn
 $ yarn add mysql2
 # to use postgresql
 $ yarn add pg pg-hstore
+# start the api
+$ npm start
 ```
 
 or
@@ -59,6 +61,8 @@ $ npm i
 $ npm i mysql2 -S
 # to use postgresql
 $ yarn i -S pg pg-hstore
+# start the api
+$ npm start
 ```
 
 sqlite is supported out of the box as it is the default.
