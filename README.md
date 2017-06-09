@@ -546,7 +546,7 @@ There are no automation tool or task runner like [grunt](https://gruntjs.com/) o
 
 This is the entry for a developer. This command:
 
-- a **nodemon watch task** for the all files conected to `.api/api.js`
+- runs **nodemon watch task** for the all files conected to `.api/api.js`
 - sets the **environment variable** `NODE_ENV` to `development`
 - opens the db connection for `development`
 - starts the server on 127.0.0.1:3333
@@ -583,7 +583,7 @@ Optional:
 ### other commands
 
 - `npm run dev` - simply start the server withou a watcher
-- `npm run dropDB` - drops **ONLY** the sqlite database
+- `npm run drop-db` - drops **ONLY** the sqlite database
 - `npm run lint` - linting with [eslint](http://eslint.org/)
 - `npm run nodemon` - same as `npm start``
 - `npm run prepush` - a hook wich runs before pushing to a repository, runs `npm test` and `npm run dropDB`
