@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "export NODE_ENV=development && node ./api/api.js",
-    "dropDB": "rm ./db/database.sqlite && touch ./db/database.sqlite",
+    "drop-db": "rm ./db/database.sqlite && touch ./db/database.sqlite",
     "lint": "eslint ./api/. ./config/. ./test/.",
     "start": "npm run nodemon",
     "nodemon": "nodemon --exec npm run dev",
