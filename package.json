@@ -13,14 +13,15 @@
   },
   "scripts": {
     "dev": "export NODE_ENV=development && node ./api/api.js",
-    "drop-db": "rm ./db/database.sqlite && touch ./db/database.sqlite",
+    "create-sqlite-db": "touch ./db/database.sqlite",
+    "drop-sqlite-db": "rm ./db/database.sqlite",
     "lint": "eslint ./api/. ./config/. ./test/.",
     "start": "npm run nodemon",
     "nodemon": "nodemon --exec npm run dev",
-    "prepush": "npm test; npm run dropDB",
+    "prepush": "npm test",
     "pretest": "npm run lint",
     "production": "export NODE_ENV=production && node ./api/api.js",
-    "test": "export NODE_ENV=test && nyc ava -s",
+    "test": "npm run create-sqlite-db; export NODE_ENV=test && nyc ava -s; npm run drop-sqlite-db",
     "test-ci": "nyc ava --no-color"
   },
   "babel": {
