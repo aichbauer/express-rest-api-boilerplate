@@ -76,37 +76,6 @@ This boilerplate has 4 main directories:
 - db - this is only a dir for the sqlite db, the default for NODE_ENV development
 - test - using [AVA](https://github.com/avajs/ava)
 
-```sh
-src
-├── api
-│   ├── controllers
-│   │   └── UserController.js
-│   ├── models
-│   │   └── User.js
-│   ├── policies
-│   │   └── auth.policy.js
-│   ├── services
-│   │   ├── auth.service.js
-│   │   └── bcrypt.service.js
-│   └── api.js
-├── config
-│   ├── connection.js
-│   ├── database.js
-│   ├── index.js
-│   └── routes
-│        ├── privateRoutes.js
-│        └── publicRoutes.js
-├── db
-│   └── database.sqlite
-└── test
-    ├── controllers
-    │   └── UserController.test.js
-    ├── models
-    │   └── User.test.js
-    └── setup
-         └── _setup.js
-```
-
 ## Controllers
 
 ### Create a Controller
@@ -240,8 +209,6 @@ const ModelController = () => {
   };
 };
 
-// IMPORTANT
-// don't forget to export the Controller
 model.exports = ModelController;
 ```
 
@@ -444,7 +411,7 @@ For further information read the [docs](https://github.com/aichbauer/express-rou
 
 Example for User Model:
 
-> Note: Only supported Methods are **POST**, **GET**, **PUT**, and **DELETE**. So no **PATCH** for updates, etc...
+> Note: Only supported Methods are **POST**, **GET**, **PUT**, and **DELETE**.
 
 userRoutes.js
 
@@ -545,6 +512,8 @@ There are no automation tool or task runner like [grunt](https://gruntjs.com/) o
 ### npm start
 
 This is the entry for a developer. This command:
+
+By default it uses a sqlite databse, if you want to migrate the sqlite db by each start, disable the `prestart` and `poststart` command. Also mind if you are using a sqlite database to delete the `drop-sqlite-db` in the prepush hook.
 
 - runs **nodemon watch task** for the all files conected to `.api/api.js`
 - sets the **environment variable** `NODE_ENV` to `development`
