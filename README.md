@@ -94,57 +94,66 @@ const ModelController = () => {
     // body is part of a form-data
     const value = req.body.value;
 
-    Model.create({
-      key: value
-    }).then((model) => {
-      if(!model) {
-        return res.status(400).json({ msg: 'Bad Request: Model not found' });
-      }
+    Model
+      .create({
+        key: value
+      })
+      .then((model) => {
+        if(!model) {
+          return res.status(400).json({ msg: 'Bad Request: Model not found' });
+        }
 
-      return res.status(200).json({ model });
-    }).catch((err) => {
-      // better save it to log file
-      console.error(err);
+        return res.status(200).json({ model });
+      })
+      .catch((err) => {
+        // better save it to log file
+        console.error(err);
 
-      return res.status(500).json({ msg: 'Internal server error' });
-    });
+        return res.status(500).json({ msg: 'Internal server error' });
+      });
   };
 
   const getAll = (req, res) {
-    Model.findAll().then((models) => {
-      if(!models){
-        return res.status(400).json({ msg: 'Bad Request: Models not found' });
-      }
+    Model
+      .findAll()
+      .then((models) => {
+        if(!models){
+          return res.status(400).json({ msg: 'Bad Request: Models not found' });
+        }
 
-      return res.status(200).json({ models });
-    }).catch((err) => {
-      // better save it to log file
-      console.error(err);
+        return res.status(200).json({ models });
+      })
+      .catch((err) => {
+        // better save it to log file
+        console.error(err);
 
-      return res.status(500).json({ msg: 'Internal server error' });
-    });
+        return res.status(500).json({ msg: 'Internal server error' });
+      });
   };
 
   const get = (req, res) => {
     // params is part of an url
     const id = req.params.id;
 
-    Model.findOne({
-      where: {
-        id,
-      },
-    }).then((model) => {
-      if(!model) {
-        return res.status(400).json({ msg: 'Bad Request: Model not found' });
-      }
+    Model
+      .findOne({
+        where: {
+          id,
+        },
+      })
+      .then((model) => {
+        if(!model) {
+          return res.status(400).json({ msg: 'Bad Request: Model not found' });
+        }
 
-      return res.status(200).json({ model });
-    }).catch((err) => {
-      // better save it to log file
-      console.error(err);
+        return res.status(200).json({ model });
+      })
+      .catch((err) => {
+        // better save it to log file
+        console.error(err);
 
-      return res.status(500).json({ msg: 'Internal server error' });
-    });
+        return res.status(500).json({ msg: 'Internal server error' });
+      });
   };
 
   const update = (req, res) => {
@@ -154,48 +163,54 @@ const ModelController = () => {
     // body is part of form-data
     const value = req.body.value;
 
-    Model.findById(id).then((model) => {
-      if(!model) {
-        return res.status(400).json({ msg: 'Bad Request: Model not found' });
-      }
+    Model
+      .findById(id)
+      .then((model) => {
+        if(!model) {
+          return res.status(400).json({ msg: 'Bad Request: Model not found' });
+        }
 
-      return model
-        .update({
-          key: value,
-        }).then((updatedModel) => {
-          return res.status(200).json({ updatedModel });
-        });
-    }).catch((err) => {
-      // better save it to log file
-      console.error(err);
+        return model
+          .update({
+            key: value,
+          }).then((updatedModel) => {
+            return res.status(200).json({ updatedModel });
+          });
+      })
+      .catch((err) => {
+        // better save it to log file
+        console.error(err);
 
-      return res.status(500).json({ msg: 'Internal server error' });
-    });
+        return res.status(500).json({ msg: 'Internal server error' });
+      });
   };
 
   const destroy = (req, res) => {
     // params is part of an url
     const id = req.params.id;
 
-    Model.findById(id).then((model) => {
-      if(!model) {
-        return res.status(400).json({ msg: 'Bad Request: Model not found' })
-      }
+    Model
+      .findById(id)
+      .then((model) => {
+        if(!model) {
+          return res.status(400).json({ msg: 'Bad Request: Model not found' })
+        }
 
-      model.destroy().then(() => {
-        return res.status(200).json({ msg: 'Successfully destroyed model' });
-      }).catch((err) => {
+        model.destroy().then(() => {
+          return res.status(200).json({ msg: 'Successfully destroyed model' });
+        }).catch((err) => {
+          // better save it to log file
+          console.error(err);
+
+          return res.status(500).json({ msg: 'Internal server error' });
+        });
+      })
+      .catch((err) => {
         // better save it to log file
         console.error(err);
 
         return res.status(500).json({ msg: 'Internal server error' });
       });
-    }).catch((err) => {
-      // better save it to log file
-      console.error(err);
-
-      return res.status(500).json({ msg: 'Internal server error' });
-    });
   };
 
   // IMPORTANT
