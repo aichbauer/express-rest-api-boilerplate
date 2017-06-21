@@ -518,7 +518,7 @@ By default it uses a sqlite databse, if you want to migrate the sqlite db by eac
 - runs **nodemon watch task** for the all files conected to `.api/api.js`
 - sets the **environment variable** `NODE_ENV` to `development`
 - opens the db connection for `development`
-- starts the server on 127.0.0.1:3333
+- starts the server on 127.0.0.1:2017
 
 ### npm test
 
@@ -537,7 +537,7 @@ This command:
 
 - sets the **environment variable** to `production`
 - opens the db connection for `production`
-- starts the server on 127.0.0.1:3333 or on 127.0.0.1:PORT_ENV
+- starts the server on 127.0.0.1:2017 or on 127.0.0.1:PORT_ENV
 
 Before running on production you have to set the **environment vaiables**:
 
@@ -549,7 +549,7 @@ Before running on production you have to set the **environment vaiables**:
 
 Optional:
 
-- PORT - the port your api on 127.0.0.1, default to 3333
+- PORT - the port your api on 127.0.0.1, default to 2017
 
 ### other commands
 

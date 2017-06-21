@@ -62,3 +62,6 @@ typings/
 
 
 # End of https://www.gitignore.io/api/node
+
+# sqlite database
+db/database.sqlite
