@@ -7,8 +7,6 @@ const UserController = () => {
     console.log(req.body);
     const body = req.body;
 
-    console.log(body);
-
     if (body.password === body.password2) {
       return User
         .create({
