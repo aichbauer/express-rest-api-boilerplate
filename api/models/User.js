@@ -22,7 +22,7 @@ const instanceMethods = {
 const tableName = 'users';
 
 const User = sequelize.define('User', {
-  username: {
+  email: {
     type: Sequelize.STRING,
     unique: true,
   },
