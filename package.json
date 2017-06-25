@@ -27,7 +27,9 @@
     "test-ci": "nyc ava --no-color"
   },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   },
   "ava": {
     "require": [
@@ -45,6 +47,7 @@
     "babel-polyfill": "^6.23.0",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.17.2",
+    "cors": "^2.8.3",
     "express": "^4.15.3",
     "express-routes-mapper": "^1.0.1",
     "helmet": "^3.6.1",
