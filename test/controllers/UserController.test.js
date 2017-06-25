@@ -23,8 +23,9 @@ test.serial('User | create', async (t) => {
     .post('/public/user')
     .set('Accept', /json/)
     .send({
-      username: 'martin',
+      email: 'martin@mail.com',
       password: 'securepassword',
+      password2: 'securepassword',
     })
     .expect(200)
     .then((res) => {
@@ -35,7 +36,7 @@ test.serial('User | create', async (t) => {
 
   await User.findById(id).then((user) => {
     t.is(user.id, id);
-    t.is(user.username, 'martin');
+    t.is(user.email, 'martin@mail.com');
     return user.destroy();
   });
 });
@@ -43,7 +44,7 @@ test.serial('User | create', async (t) => {
 test.serial('User | login', async (t) => {
   let testUser;
   await User.create({
-    username: 'martin',
+    email: 'martin@mail.com',
     password: 'securepassword',
   }).then((user) => {
     testUser = user;
@@ -54,7 +55,7 @@ test.serial('User | login', async (t) => {
     .post('/public/login')
     .set('Accept', /json/)
     .send({
-      username: 'martin',
+      email: 'martin@mail.com',
       password: 'securepassword',
     })
     .expect(200)
@@ -69,7 +70,7 @@ test.serial('User | get all (auth)', async (t) => {
   let token;
   let testUser;
   await User.create({
-    username: 'martin',
+    email: 'martin@mail.com',
     password: 'securepassword',
   }).then((user) => {
     testUser = user;
@@ -80,7 +81,7 @@ test.serial('User | get all (auth)', async (t) => {
     .post('/public/login')
     .set('Accept', /json/)
     .send({
-      username: 'martin',
+      email: 'martin@mail.com',
       password: 'securepassword',
     })
     .expect(200)

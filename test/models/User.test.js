@@ -3,7 +3,7 @@ const User = require('../../api/models/User');
 
 test.beforeEach(async (t) => {
   await User.create({ // eslint-disable-line
-    username: 'martin',
+    email: 'martin@mail.com',
     password: 'securepassword',
   }).then((user) => {
     t.context.user = user; // eslint-disable-line
@@ -14,7 +14,7 @@ test.beforeEach(async (t) => {
 test.serial('User is created correctly', async (t) => {
   const sendUser = t.context.user.toJSON();
   // check if user is created
-  t.is(t.context.user.username, 'martin');
+  t.is(t.context.user.email, 'martin@mail.com');
   // check if password is not send to browser
   t.falsy(sendUser.password);
 
@@ -23,13 +23,13 @@ test.serial('User is created correctly', async (t) => {
 
 test.serial('User is updated correctly', async (t) => {
   await t.context.user.update({
-    username: 'peter',
+    email: 'peter@mail.com',
   }).then((user) => {
     t.context.user = user; // eslint-disable-line
     return t.context.user;
   });
 
-  t.is(t.context.user.username, 'peter');
+  t.is(t.context.user.email, 'peter@mail.com');
 
   await t.context.user.destroy();
 });
