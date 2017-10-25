@@ -12,9 +12,9 @@
     "url": "https://github.com/aichbauer/express-rest-api-boilerplate/issues"
   },
   "scripts": {
-    "dev": "export NODE_ENV=development && node ./api/api.js",
-    "create-sqlite-db": "touch ./db/database.sqlite",
-    "drop-sqlite-db": "rm ./db/database.sqlite",
+    "dev": "export NODE_ENV=development || set NODE_ENV=development && node ./api/api.js",
+    "create-sqlite-db": "touch ./db/database.sqlite || type nul > ./db/database.sqlite",
+    "drop-sqlite-db": "rm ./db/database.sqlite || del ./db/database.sqlite",
     "lint": "eslint ./api/. ./config/. ./test/.",
     "prestart": "npm run drop-sqlite-db",
     "start": "npm run nodemon",
@@ -22,8 +22,8 @@
     "nodemon": "nodemon --exec npm run dev",
     "prepush": "npm test",
     "pretest": "npm run lint",
-    "production": "export NODE_ENV=production && node ./api/api.js",
-    "test": "npm run create-sqlite-db; export NODE_ENV=test && nyc ava -s; npm run drop-sqlite-db",
+    "production": "export NODE_ENV=production || set NODE_ENV=production  && node ./api/api.js",
+    "test": "npm run create-sqlite-db; export NODE_ENV=test || set NODE_ENV=test && nyc ava -s; npm run drop-sqlite-db",
     "test-ci": "nyc ava --no-color"
   },
   "babel": {
