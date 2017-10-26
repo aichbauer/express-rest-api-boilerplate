@@ -36,7 +36,7 @@ Start by cloning this repository
 
 ```sh
 # HTTPS
-$ git clone https://github.com/aichbauer/express-resr-api-boilerplate.git
+$ git clone https://github.com/aichbauer/express-rest-api-boilerplate.git
 ```
 
 then
