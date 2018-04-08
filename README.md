@@ -49,7 +49,7 @@ $ yarn add mysql2
 # to use postgresql
 $ yarn add pg pg-hstore
 # start the api
-$ npm start
+$ yarn start
 ```
 
 or
@@ -60,7 +60,7 @@ $ npm i
 # to use mysql
 $ npm i mysql2 -S
 # to use postgresql
-$ yarn i -S pg pg-hstore
+$ npm i -S pg pg-hstore
 # start the api
 $ npm start
 ```
