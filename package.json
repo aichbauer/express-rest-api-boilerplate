@@ -2,7 +2,7 @@
   "name": "express-rest-api-boilerplate",
   "version": "0.0.0",
   "author": "Lukas Aichbauer <l.aichbauer@gmail.com>",
-  "licence": "MIT",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aichbauer/express-rest-api-boilerplate.git"
