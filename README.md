@@ -7,7 +7,7 @@
 - support for [sqlite](https://www.sqlite.org/), [mysql](https://www.mysql.com/), and [postgresql](https://www.postgresql.org/)
 - environments for `development`, `testing`, and `production`
 - linting via [eslint](https://github.com/eslint/eslint)
-- integration tests running with [AVA](https://github.com/avajs/ava)
+- integration tests running with [Jest](https://github.com/facebook/jest)
 - built with [npm sripts](#npm-scripts)
 - example for User model and User controller, with jwt authentication, simply type `npm i` and `npm start`
 
@@ -74,7 +74,7 @@ This boilerplate has 4 main directories:
 - api - for controllers, models, services, etc.
 - config - for routes, database, etc.
 - db - this is only a dir for the sqlite db, the default for NODE_ENV development
-- test - using [AVA](https://github.com/avajs/ava)
+- test - using [Jest](https://github.com/facebook/jest)
 
 ## Controllers
 
@@ -92,7 +92,7 @@ const Model = require('../models/Model');
 const ModelController = () => {
   const create = (req, res) => {
     // body is part of a form-data
-    const value = req.body.value;
+    const { value } = req.body;
 
     Model
       .create({
@@ -133,7 +133,7 @@ const ModelController = () => {
 
   const get = (req, res) => {
     // params is part of an url
-    const id = req.params.id;
+    const { id } = req.params;
 
     Model
       .findOne({
@@ -158,10 +158,10 @@ const ModelController = () => {
 
   const update = (req, res) => {
     // params is part of an url
-    const id = req.params.id;
+    const { id } = req.params;
 
     // body is part of form-data
-    const value = req.body.value;
+    const { value } = req.body;
 
     Model
       .findById(id)
@@ -187,7 +187,7 @@ const ModelController = () => {
 
   const destroy = (req, res) => {
     // params is part of an url
-    const id = req.params.id;
+    const { id } = req.params;
 
     Model
       .findById(id)
@@ -251,19 +251,6 @@ const hooks = {
   },
 };
 
-// instanceMethods are functions that run on instances of our model
-// toJSON runs before delivering it to our client
-// we delete the password, that the client has no sensitive data
-const instanceMethods = {
-  toJSON() {
-    const values = Object.assign({}, this.get());
-
-    delete values.password;
-
-    return values;
-  },
-};
-
 // naming the table in DB
 const tableName = 'users';
 
@@ -276,7 +263,20 @@ const User = sequelize.define('User', {
   password: {
     type: Sequelize.STRING,
   },
-}, { hooks, instanceMethods, tableName });
+}, { hooks, tableName });
+
+// instead of using instanceMethod
+// in sequelize > 4 we are writing the function
+// to the prototype object of our model.
+// as we do not want to share sensitive data, the password
+// field gets ommited before sending
+User.prototype.toJSON = function () {
+  const values = Object.assign({}, this.get());
+
+  delete values.password;
+
+  return values;
+};
 
 // IMPORTANT
 // don't forget to export the Model
@@ -464,7 +464,7 @@ app.all('/prefix/*', (req, res, next) => auth(req, res, next));
 
 ## Test
 
-All test for this boilerplate uses [AVA](https://github.com/avajs/ava) and [supertest](https://github.com/visionmedia/superagent) for integration testing. So read their docs on further information.
+All test for this boilerplate uses [Jest](https://github.com/facebook/jest) and [supertest](https://github.com/visionmedia/superagent) for integration testing. So read their docs on further information.
 
 ### Setup
 
@@ -481,7 +481,6 @@ To test a Controller we create `fake requests` to our api routes.
 Example `GET /user` from last example with prefix `prefix`:
 
 ```js
-const test = require('ava');
 const request = require('supertest');
 const {
   beforeAction,
@@ -490,35 +489,33 @@ const {
 
 let api;
 
-test.before(async () => {
+beforeAll(async () => {
   api = await beforeAction();
 });
 
-test.after(() => {
+afterAll(() => {
   afterAction();
 });
 
-test('test', async (t) => {
+test('test', async () => {
   const token = 'this-should-be-a-valid-token';
 
-  await request(api)
-  .get('/prefix/user')
-  .set('Accept', /json/)
-  // if auth is needed
-  .set('Authorization', `Bearer ${token}`)
-  .set('Content-Type', 'application/json')
-  .expect(200)
-  .then((res) => {
-    // do some fancy stuff
-    t.truthy(res.body.users);
-  });
-});
+  const res = await request(api)
+    .get('/prefix/user')
+    .set('Accept', /json/)
+    // if auth is needed
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .expect(200);
 
+  // read the docs of jest for further information
+  expect(res.body.user).toBe('something')
+});
 ```
 
 ### Models
 
-Are usually automatically tested as the Controller uses the Models, but you can test them separatly.
+Are usually automatically tested in the integration tests as the Controller uses the Models, but you can test them separatly.
 
 ## npm scripts
 
@@ -542,8 +539,7 @@ This command:
 - runs `npm run lint` ([eslint](http://eslint.org/)) with the [airbnb styleguide](https://github.com/airbnb/javascript) without arrow-parens rule for **better readability**
 - sets the **environment variable** `NODE_ENV` to `testing`
 - creates the `database.sqlite` for the test
-- runs `nyc` the cli-tool for [istanbul](https://istanbul.js.org/) for test coverage
-- runs `ava -s` for testing with [AVA](https://github.com/avajs/ava)
+- runs `jest --coverage` for testing with [Jest](https://github.com/facebook/jest) and the coverage
 - drops the `database.sqlite` after the test
 
 ## npm run production
