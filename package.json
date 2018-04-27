@@ -12,7 +12,7 @@
     "url": "https://github.com/aichbauer/express-rest-api-boilerplate/issues"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development && node ./api/api.js",
+    "dev": "cross-env NODE_ENV=development node ./api/api.js",
     "create-sqlite-db": "shx touch ./db/database.sqlite",
     "drop-sqlite-db": "shx rm ./db/database.sqlite",
     "lint": "eslint ./api/. ./config/. ./test/.",
@@ -23,24 +23,16 @@
     "prepush": "npm test",
     "pretest": "npm run lint",
     "production": "cross-env NODE_ENV=production && node ./api/api.js",
-    "test": "npm run create-sqlite-db; cross-env NODE_ENV=test && nyc ava -s; npm run drop-sqlite-db",
-    "test-ci": "nyc ava --no-color"
+    "test": "npm run create-sqlite-db; cross-env NODE_ENV=testing jest --coverage; npm run drop-sqlite-db",
+    "test-ci": "jest --coverage --forceExit"
   },
-  "babel": {
-    "presets": [
-      "env"
-    ]
-  },
-  "ava": {
-    "require": [
-      "babel-register",
-      "babel-polyfill"
-    ],
-    "babel": "inherit"
-  },
-  "nyc": {
-    "exclude": [
-      "test"
+  "jest": {
+    "globals": {
+      "__DEV__": true
+    },
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
     ]
   },
   "dependencies": {
@@ -55,15 +47,13 @@
     "sqlite3": "^4.0.0"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "babel-polyfill": "^6.26.0",
     "cross-env": "^5.1.4",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0",
     "husky": "^0.14.3",
+    "jest": "^22.4.3",
     "nodemon": "^1.17.3",
-    "nyc": "^11.7.1",
     "shx": "^0.2.2",
     "supertest": "^3.0.0"
   }

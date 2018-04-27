@@ -1,35 +1,42 @@
-const test = require('ava');
+const {
+  beforeAction,
+  afterAction,
+} = require('../setup/_setup');
 const User = require('../../api/models/User');
 
-test.beforeEach(async (t) => {
-  await User.create({ // eslint-disable-line
+let user;
+
+beforeAll(async () => {
+  await beforeAction();
+});
+
+afterAll(() => {
+  afterAction();
+});
+
+beforeEach(async () => {
+  user = await User.build({
     email: 'martin@mail.com',
     password: 'securepassword',
-  }).then((user) => {
-    t.context.user = user; // eslint-disable-line
-    return t.context.user;
-  });
+  }).save();
 });
 
-test.serial('User is created correctly', async (t) => {
-  const sendUser = t.context.user.toJSON();
+test('User is created correctly', async () => {
+  const sendUser = user.toJSON();
   // check if user is created
-  t.is(t.context.user.email, 'martin@mail.com');
+  expect(user.email).toBe('martin@mail.com');
   // check if password is not send to browser
-  t.falsy(sendUser.password);
+  expect(sendUser.password).toBeFalsy();
 
-  await t.context.user.destroy();
+  await user.destroy();
 });
 
-test.serial('User is updated correctly', async (t) => {
-  await t.context.user.update({
+test('User is updated correctly', async () => {
+  await user.update({
     email: 'peter@mail.com',
-  }).then((user) => {
-    t.context.user = user; // eslint-disable-line
-    return t.context.user;
   });
 
-  t.is(t.context.user.email, 'peter@mail.com');
+  expect(user.email).toBe('peter@mail.com');
 
-  await t.context.user.destroy();
+  await user.destroy();
 });
