@@ -42,8 +42,7 @@ const dbService = (environment, migrate) => {
           .then(() => successfulDBStart())
           .catch((err) => errorDBStart(err))
       )
-        .catch((err) => errorDBStart(err)),
-      )
+        .catch((err) => errorDBStart(err)))
   );
 
   const startDev = () => (

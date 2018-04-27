@@ -17,7 +17,7 @@ test.after(() => {
 });
 
 test.serial('User | create', async (t) => {
-  let id;
+  let userId;
 
   await request(api)
     .post('/public/user')
@@ -30,12 +30,12 @@ test.serial('User | create', async (t) => {
     .expect(200)
     .then((res) => {
       t.truthy(res.body.user);
-      id = res.body.user.id;
-      return id;
+      userId = res.body.user.id;
+      return userId;
     });
 
-  await User.findById(id).then((user) => {
-    t.is(user.id, id);
+  await User.findById(userId).then((user) => {
+    t.is(user.id, userId);
     t.is(user.email, 'martin@mail.com');
     return user.destroy();
   });
@@ -67,7 +67,7 @@ test.serial('User | login', async (t) => {
 });
 
 test.serial('User | get all (auth)', async (t) => {
-  let token;
+  let userToken;
   let testUser;
   await User.create({
     email: 'martin@mail.com',
@@ -87,14 +87,14 @@ test.serial('User | get all (auth)', async (t) => {
     .expect(200)
     .then((res) => {
       t.truthy(res.body.token);
-      token = res.body.token;
-      return token;
+      userToken = res.body.token;
+      return userToken;
     });
 
   await request(api)
     .get('/private/users')
     .set('Accept', /json/)
-    .set('Authorization', `Bearer ${token}`)
+    .set('Authorization', `Bearer ${userToken}`)
     .set('Content-Type', 'application/json')
     .expect(200)
     .then((res) => {

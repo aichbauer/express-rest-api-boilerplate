@@ -9,16 +9,6 @@ const hooks = {
   },
 };
 
-const instanceMethods = {
-  toJSON() {
-    const values = Object.assign({}, this.get());
-
-    delete values.password;
-
-    return values;
-  },
-};
-
 const tableName = 'users';
 
 const User = sequelize.define('User', {
@@ -29,6 +19,15 @@ const User = sequelize.define('User', {
   password: {
     type: Sequelize.STRING,
   },
-}, { hooks, instanceMethods, tableName });
+}, { hooks, tableName });
+
+// eslint-disable-next-line
+User.prototype.toJSON = function () {
+  const values = Object.assign({}, this.get());
+
+  delete values.password;
+
+  return values;
+};
 
 module.exports = User;

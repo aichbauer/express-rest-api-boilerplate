@@ -18,7 +18,8 @@ switch (process.env.NODE_ENV) {
           min: 0,
           idle: 10000,
         },
-      });
+      },
+    );
     break;
   case 'testing':
     database = new Sequelize(
@@ -32,7 +33,8 @@ switch (process.env.NODE_ENV) {
           min: 0,
           idle: 10000,
         },
-      });
+      },
+    );
     break;
   default:
     database = new Sequelize(
@@ -47,7 +49,8 @@ switch (process.env.NODE_ENV) {
           idle: 10000,
         },
         storage: path.join(process.cwd(), 'db', 'database.sqlite'),
-      });
+      },
+    );
 }
 
 module.exports = database;

@@ -2,7 +2,7 @@ const JWTService = require('../services/auth.service');
 
 // usually: "Authorization: Bearer [token]" or "token: [token]"
 module.exports = (req, res, next) => {
-  let token;
+  let tokenToVerify;
 
   if (req.header('Authorization')) {
     const parts = req.header('Authorization').split(' ');
@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
       const credentials = parts[1];
 
       if (/^Bearer$/.test(scheme)) {
-        token = credentials;
+        tokenToVerify = credentials;
       } else {
         return res.status(401).json({ msg: 'Format for Authorization: Bearer [token]' });
       }
@@ -20,13 +20,13 @@ module.exports = (req, res, next) => {
       return res.status(401).json({ msg: 'Format for Authorization: Bearer [token]' });
     }
   } else if (req.body.token) {
-    token = req.body.token;
+    tokenToVerify = req.body.token;
     delete req.query.token;
   } else {
     return res.status(401).json({ msg: 'No Authorization was found' });
   }
 
-  return JWTService.verify(token, (err, thisToken) => {
+  return JWTService.verify(tokenToVerify, (err, thisToken) => {
     if (err) return res.status(401).json({ err });
     req.token = thisToken;
     return next();

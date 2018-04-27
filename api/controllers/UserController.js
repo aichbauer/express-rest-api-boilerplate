@@ -4,8 +4,7 @@ const bcryptService = require('../services/bcrypt.service');
 
 const UserController = () => {
   const register = (req, res) => {
-    console.log(req.body);
-    const body = req.body;
+    const { body } = req;
 
     if (body.password === body.password2) {
       return User
@@ -28,8 +27,7 @@ const UserController = () => {
   };
 
   const login = (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
 
     if (email && password) {
       User
@@ -59,10 +57,10 @@ const UserController = () => {
   };
 
   const validate = (req, res) => {
-    const tokenToVerify = req.body.token;
+    const { token } = req.body;
 
     authService
-      .verify(tokenToVerify, (err) => {
+      .verify(token, (err) => {
         if (err) {
           return res.status(401).json({ isvalid: false, err: 'Invalid Token!' });
         }
