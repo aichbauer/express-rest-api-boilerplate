@@ -1,13 +1,21 @@
 const bcrypt = require('bcrypt-nodejs');
 
-module.exports = {
-  password: (user) => {
+const bcryptService = () => {
+  const password = (user) => {
     const salt = bcrypt.genSaltSync();
     const hash = bcrypt.hashSync(user.password, salt);
 
     return hash;
-  },
-  comparePassword: (password, hash) => (
-    bcrypt.compareSync(password, hash)
-  ),
+  };
+
+  const comparePassword = (pw, hash) => (
+    bcrypt.compareSync(pw, hash)
+  );
+
+  return {
+    password,
+    comparePassword,
+  };
 };
+
+module.exports = bcryptService;

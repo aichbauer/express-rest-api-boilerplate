@@ -90,127 +90,116 @@ Example Controller for all **CRUD** oparations:
 const Model = require('../models/Model');
 
 const ModelController = () => {
-  const create = (req, res) => {
+  const create = async (req, res) => {
     // body is part of a form-data
     const { value } = req.body;
 
-    Model
-      .create({
+    try {
+      const model = await Model.create({
         key: value
-      })
-      .then((model) => {
-        if(!model) {
-          return res.status(400).json({ msg: 'Bad Request: Model not found' });
-        }
-
-        return res.status(200).json({ model });
-      })
-      .catch((err) => {
-        // better save it to log file
-        console.error(err);
-
-        return res.status(500).json({ msg: 'Internal server error' });
       });
+
+      if(!model) {
+        return res.status(400).json({ msg: 'Bad Request: Model not found' });
+      }
+
+      return res.status(200).json({ model });
+    } catch (err) {
+      // better save it to log file
+      console.error(err);
+
+      return res.status(500).json({ msg: 'Internal server error' });
+    }
   };
 
-  const getAll = (req, res) {
-    Model
-      .findAll()
-      .then((models) => {
-        if(!models){
-          return res.status(400).json({ msg: 'Bad Request: Models not found' });
-        }
+  const getAll = async (req, res) => {
+    try {
+      const model = await Model.findAll();
 
-        return res.status(200).json({ models });
-      })
-      .catch((err) => {
-        // better save it to log file
-        console.error(err);
+      if(!models){
+        return res.status(400).json({ msg: 'Bad Request: Models not found' });
+      }
 
-        return res.status(500).json({ msg: 'Internal server error' });
-      });
+      return res.status(200).json({ models });
+    } catch (err) {
+      // better save it to log file
+      console.error(err);
+
+      return res.status(500).json({ msg: 'Internal server error' });
+    }
   };
 
-  const get = (req, res) => {
+  const get = async (req, res) => {
     // params is part of an url
     const { id } = req.params;
 
-    Model
-      .findOne({
+    try {
+      const model = await Model.findOne({
         where: {
           id,
         },
-      })
-      .then((model) => {
-        if(!model) {
-          return res.status(400).json({ msg: 'Bad Request: Model not found' });
-        }
-
-        return res.status(200).json({ model });
-      })
-      .catch((err) => {
-        // better save it to log file
-        console.error(err);
-
-        return res.status(500).json({ msg: 'Internal server error' });
       });
+
+      if(!model) {
+        return res.status(400).json({ msg: 'Bad Request: Model not found' });
+      }
+
+      return res.status(200).json({ model });
+    } catch (err) {
+      // better save it to log file
+      console.error(err);
+
+      return res.status(500).json({ msg: 'Internal server error' });
+    }
   };
 
-  const update = (req, res) => {
+  const update = async (req, res) => {
     // params is part of an url
     const { id } = req.params;
 
     // body is part of form-data
     const { value } = req.body;
 
-    Model
-      .findById(id)
-      .then((model) => {
-        if(!model) {
-          return res.status(400).json({ msg: 'Bad Request: Model not found' });
-        }
+    try {
+      const model = await Model.findById(id);
 
-        return model
-          .update({
-            key: value,
-          }).then((updatedModel) => {
-            return res.status(200).json({ updatedModel });
-          });
-      })
-      .catch((err) => {
-        // better save it to log file
-        console.error(err);
+      if(!model) {
+        return res.status(400).json({ msg: 'Bad Request: Model not found' });
+      }
 
-        return res.status(500).json({ msg: 'Internal server error' });
-      });
+      const updatedModel = await model.update({
+        key: value,
+      )};
+
+      return res.status(200).json({ updatedModel });
+    } catch (err) {
+      // better save it to log file
+      console.error(err);
+
+      return res.status(500).json({ msg: 'Internal server error' });
+    }
   };
 
-  const destroy = (req, res) => {
+  const destroy = async (req, res) => {
     // params is part of an url
     const { id } = req.params;
 
-    Model
-      .findById(id)
-      .then((model) => {
-        if(!model) {
-          return res.status(400).json({ msg: 'Bad Request: Model not found' })
-        }
+    try {
+      const model =  Model.findById(id);
 
-        model.destroy().then(() => {
-          return res.status(200).json({ msg: 'Successfully destroyed model' });
-        }).catch((err) => {
-          // better save it to log file
-          console.error(err);
+      if(!model) {
+        return res.status(400).json({ msg: 'Bad Request: Model not found' })
+      }
 
-          return res.status(500).json({ msg: 'Internal server error' });
-        });
-      })
-      .catch((err) => {
-        // better save it to log file
-        console.error(err);
+      await model.destroy();
 
-        return res.status(500).json({ msg: 'Internal server error' });
-      });
+      return res.status(200).json({ msg: 'Successfully destroyed model' });
+    } catch (err) {
+      // better save it to log file
+      console.error(err);
+
+      return res.status(500).json({ msg: 'Internal server error' });
+    }
   };
 
   // IMPORTANT
@@ -317,7 +306,7 @@ api.js
 ```js
 const adminPolicy = require('./policies/admin.policy');
 
-app.all('/admin/*', (req,res,next) => adminPolicy(req,res,next));
+app.all('/admin/*', (req, res, next) => adminPolicy(req,res,next));
 ```
 
 Or for one specific route
@@ -328,8 +317,8 @@ api.js
 const adminPolicy = require('./policies/admin.policy');
 
 app.get('/admin/myroute',
-  (req,res,next) => adminPolicy(req,res,next),
-  (req,res) => {
+  (req, res, next) => adminPolicy(req,res,next),
+  (req, res) => {
   //do some fancy stuff
 });
 ```
@@ -369,17 +358,25 @@ Example service:
 Get comments from another API:
 
 ```js
-module.exports = {
-  getComments: () => (
-    fetch('https://jsonplaceholder.typicode.com/comments', {
-      method: 'get'
-    }).then(function(res) {
+const commentService = () => {
+  const getComments = async () => {
+    try {
+      const res = await fetch('https://jsonplaceholder.typicode.com/comments', {
+        method: 'get'
+      });
+
       // do some fancy stuff with the response
-    }).catch(function(err) {
-      // Error :(
-    })
-  );
+    } catch (err) {
+      // handle a error
+    }
+  };
+
+  return {
+    getComments,
+  };
 };
+
+module.exports = commentService;
 ```
 
 ## Config
@@ -431,13 +428,15 @@ Example for User Model:
 userRoutes.js
 
 ```js
-module.exports = {
+const userRoutes = {
   'POST /user': 'UserController.create',
   'GET /users': 'UserController.getAll',
   'GET /user/:id': 'UserController.get',
   'PUT /user/:id': 'UserController.update',
   'DELETE /user/': 'UserController.destroy',
 };
+
+module.exports = userRoutes;
 ```
 
 To use these routes in your application, require them in the config/index.js and export them.
@@ -445,10 +444,12 @@ To use these routes in your application, require them in the config/index.js and
 ```js
 const userRoutes = require('./userRoutes');
 
-module.exports = {
+const config = {
   allTheOtherStuff,
   userRoutes,
 };
+
+module.exports = config;
 ```
 
 api.js
@@ -509,7 +510,7 @@ test('test', async () => {
     .expect(200);
 
   // read the docs of jest for further information
-  expect(res.body.user).toBe('something')
+  expect(res.body.user).toBe('something');
 });
 ```
 
@@ -576,4 +577,3 @@ Optional:
 ## LICENSE
 
 MIT © Lukas Aichbauer
-

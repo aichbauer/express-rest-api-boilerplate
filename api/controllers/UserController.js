@@ -3,80 +3,80 @@ const authService = require('../services/auth.service');
 const bcryptService = require('../services/bcrypt.service');
 
 const UserController = () => {
-  const register = (req, res) => {
+  const register = async (req, res) => {
     const { body } = req;
 
     if (body.password === body.password2) {
-      return User
-        .create({
+      try {
+        const user = await User.create({
           email: body.email,
           password: body.password,
-        })
-        .then((user) => {
-          const token = authService.issue({ id: user.id });
-
-          return res.status(200).json({ token, user });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(500).json({ msg: 'Internal server error' });
         });
+        const token = authService().issue({ id: user.id });
+
+        return res.status(200).json({ token, user });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ msg: 'Internal server error' });
+      }
     }
 
-    return res.status(400).json({ msg: 'Passwords don\'t match' });
+    return res.status(400).json({ msg: 'Bad Request: Passwords don\'t match' });
   };
 
-  const login = (req, res) => {
+  const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (email && password) {
-      User
-        .findOne({
-          where: {
-            email,
-          },
-        })
-        .then((user) => {
-          if (!user) {
-            return res.status(400).json({ msg: 'Bad Request: User not found' });
-          }
+      try {
+        const user = await User
+          .findOne({
+            where: {
+              email,
+            },
+          });
 
-          if (bcryptService.comparePassword(password, user.password)) {
-            const token = authService.issue({ id: user.id });
+        if (!user) {
+          return res.status(400).json({ msg: 'Bad Request: User not found' });
+        }
 
-            return res.status(200).json({ token, user });
-          }
+        if (bcryptService().comparePassword(password, user.password)) {
+          const token = authService().issue({ id: user.id });
 
-          return res.status(401).json({ msg: 'Unauthorized' });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(500).json({ msg: 'Internal server error' });
-        });
+          return res.status(200).json({ token, user });
+        }
+
+        return res.status(401).json({ msg: 'Unauthorized' });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ msg: 'Internal server error' });
+      }
     }
+
+    return res.status(400).json({ msg: 'Bad Request: Email or password is wrong' });
   };
 
   const validate = (req, res) => {
     const { token } = req.body;
 
-    authService
-      .verify(token, (err) => {
-        if (err) {
-          return res.status(401).json({ isvalid: false, err: 'Invalid Token!' });
-        }
+    authService().verify(token, (err) => {
+      if (err) {
+        return res.status(401).json({ isvalid: false, err: 'Invalid Token!' });
+      }
 
-        return res.status(200).json({ isvalid: true });
-      });
+      return res.status(200).json({ isvalid: true });
+    });
   };
 
-  const getAll = (req, res) => {
-    User
-      .findAll()
-      .then((users) => res.status(200).json({ users }))
-      .catch((err) => {
-        console.log(err);
-        return res.status(500).json({ msg: 'Internal server error' });
-      });
+  const getAll = async (req, res) => {
+    try {
+      const users = await User.findAll();
+
+      return res.status(200).json({ users });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ msg: 'Internal server error' });
+    }
   };
 
 

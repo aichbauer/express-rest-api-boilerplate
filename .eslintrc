@@ -4,7 +4,10 @@
         "import"
     ],
     "rules": {
-        "arrow-parens": 0
+        "arrow-parens": [
+            "error",
+            "always"
+        ]
     },
     "env": {
         "jest": true

@@ -1,20 +1,11 @@
 const database = require('../../config/database');
 
 const dbService = (environment, migrate) => {
-  const authenticateDB = () => (
-    database
-      .authenticate()
-  );
+  const authenticateDB = () => database.authenticate();
 
-  const dropDB = () => (
-    database
-      .drop()
-  );
+  const dropDB = () => database.drop();
 
-  const syncDB = () => (
-    database
-      .sync()
-  );
+  const syncDB = () => database.sync();
 
   const successfulDBStart = () => (
     console.info('connection to the database has been established successfully')
@@ -29,66 +20,87 @@ const dbService = (environment, migrate) => {
     return process.exit(1);
   };
 
-  const startMigrateTrue = () => (
-    syncDB()
-      .then(() => successfulDBStart())
-      .catch((err) => errorDBStart(err))
-  );
+  const startMigrateTrue = async () => {
+    try {
+      await syncDB();
+      successfulDBStart();
+    } catch (err) {
+      errorDBStart(err);
+    }
+  };
 
-  const startMigrateFalse = () => (
-    dropDB()
-      .then(() => (
-        syncDB()
-          .then(() => successfulDBStart())
-          .catch((err) => errorDBStart(err))
-      )
-        .catch((err) => errorDBStart(err)))
-  );
+  const startMigrateFalse = async () => {
+    try {
+      await dropDB();
+      await syncDB();
+      successfulDBStart();
+    } catch (err) {
+      errorDBStart(err);
+    }
+  };
 
-  const startDev = () => (
-    authenticateDB()
-      .then(() => {
-        if (migrate) {
-          return startMigrateTrue();
-        }
+  const startDev = async () => {
+    try {
+      await authenticateDB();
 
-        return startMigrateFalse();
-      })
-  );
+      if (migrate) {
+        return startMigrateTrue();
+      }
 
-  const startStage = () => (
-    authenticateDB()
-      .then(() => {
-        if (migrate) {
-          return startMigrateTrue();
-        }
+      return startMigrateFalse();
+    } catch (err) {
+      return errorDBStart(err);
+    }
+  };
 
-        return startMigrateFalse();
-      })
-  );
+  const startStage = async () => {
+    try {
+      await authenticateDB();
 
-  const startTest = () => (
-    authenticateDB()
-      .then(() => startMigrateFalse())
-  );
+      if (migrate) {
+        return startMigrateTrue();
+      }
 
-  const startProd = () => (
-    authenticateDB()
-      .then(() => startMigrateFalse())
-  );
+      return startMigrateFalse();
+    } catch (err) {
+      return errorDBStart(err);
+    }
+  };
 
-  const start = () => {
+  const startTest = async () => {
+    try {
+      await authenticateDB();
+      await startMigrateFalse();
+    } catch (err) {
+      errorDBStart(err);
+    }
+  };
+
+  const startProd = async () => {
+    try {
+      await authenticateDB();
+      await startMigrateFalse();
+    } catch (err) {
+      errorDBStart(err);
+    }
+  };
+
+  const start = async () => {
     switch (environment) {
       case 'development':
-        return startDev();
+        await startDev();
+        break;
       case 'staging':
-        return startStage();
+        await startStage();
+        break;
       case 'testing':
-        return startTest();
+        await startTest();
+        break;
       case 'production':
-        return startProd();
+        await startProd();
+        break;
       default:
-        return wrongEnvironment();
+        await wrongEnvironment();
     }
   };
 
