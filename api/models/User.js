@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
-const bcryptSevice = require('../services/bcrypt.service');
+const bcryptService = require('../services/bcrypt.service');
 
 const sequelize = require('../../config/database');
 
 const hooks = {
   beforeCreate(user) {
-    user.password = bcryptSevice().password(user); // eslint-disable-line no-param-reassign
+    user.password = bcryptService().password(user); // eslint-disable-line no-param-reassign
   },
 };
 
