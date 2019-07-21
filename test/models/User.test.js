@@ -15,10 +15,10 @@ afterAll(() => {
 });
 
 beforeEach(async () => {
-  user = await User.build({
+  user = await User.create({
     email: 'martin@mail.com',
     password: 'securepassword',
-  }).save();
+  });
 });
 
 test('User is created correctly', async () => {

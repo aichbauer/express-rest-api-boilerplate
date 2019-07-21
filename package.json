@@ -38,12 +38,13 @@
   "dependencies": {
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.18.2",
+    "core-js": "^2.6.9",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-routes-mapper": "^1.0.2",
     "helmet": "^3.12.0",
     "jsonwebtoken": "^8.2.1",
-    "sequelize": "^4.37.6",
+    "sequelize": "^6.0.0",
     "sqlite3": "^4.0.0"
   },
   "devDependencies": {
@@ -52,7 +53,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0",
     "husky": "^0.14.3",
-    "jest": "^22.4.3",
+    "jest": "^24.8.0",
     "nodemon": "^1.17.3",
     "shx": "^0.2.2",
     "supertest": "^3.0.0"

@@ -28,7 +28,7 @@ test('User | create', async () => {
 
   expect(res.body.user).toBeTruthy();
 
-  const user = await User.findById(res.body.user.id);
+  const user = await User.findByPk(res.body.user.id);
 
   expect(user.id).toBe(res.body.user.id);
   expect(user.email).toBe(res.body.user.email);
@@ -59,10 +59,10 @@ test('User | login', async () => {
 });
 
 test('User | get all (auth)', async () => {
-  const user = await User.build({
+  const user = await User.create({
     email: 'martin@mail.com',
     password: 'securepassword',
-  }).save();
+  });
 
   const res = await request(api)
     .post('/public/login')
