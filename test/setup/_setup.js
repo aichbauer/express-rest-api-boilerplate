@@ -14,10 +14,10 @@ const beforeAction = async () => {
   testapp.use(bodyParser.urlencoded({ extended: false }));
   testapp.use(bodyParser.json());
 
+  testapp.all('/private/*', (req, res, next) => auth(req, res, next));
   testapp.use('/public', mappedOpenRoutes);
   testapp.use('/private', mappedAuthRoutes);
 
-  testapp.all('/private/*', (req, res, next) => auth(req, res, next));
 
   await database.authenticate();
   await database.drop();
